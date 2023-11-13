@@ -34,12 +34,39 @@ user_input = {
 st.sidebar.subheader("User Input Data:")
 st.sidebar.write(user_input)
 
-
 import streamlit as st
 import pandas as pd
 
-# Load the Pima Indian Diabetes dataset
-df = pd.read_csv('diabetes.csv')
+# Upload the Pima Indian Diabetes dataset
+st.sidebar.header("Upload Pima Indian Diabetes Dataset")
+uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type=["csv"])
+
+# Check if a file was uploaded
+if uploaded_file is not None:
+    # Read the CSV file into a Pandas DataFrame
+    df = pd.read_csv(uploaded_file)
+
+    # Display the dataset
+    st.write("Pima Indian Diabetes Dataset")
+    st.write(df)
+else:
+    st.sidebar.warning("Upload a CSV file to load the dataset.")
+
+
+
+def app(df):
+    """This function create the Data Info page"""
+
+    # Add title to the page
+    st.title("Data page")
+
+    # Add subheader for the section
+    st.subheader("Show Data")
+
+    # Create an expansion option to check the data
+    with st.expander("Show data"):
+        st.dataframe(df)
+
 
 # Define the number of rows to display at a time
 rows_to_display = 10

@@ -35,4 +35,32 @@ st.sidebar.subheader("User Input Data:")
 st.sidebar.write(user_input)
 
 
+import streamlit as st
+import pandas as pd
+
+# Load the Pima Indian Diabetes dataset
+df = pd.read_csv('diabetes.csv')
+
+# Define the number of rows to display at a time
+rows_to_display = 10
+
+# Define a variable to keep track of the current page
+page = st.sidebar.number_input('Page', min_value=1, max_value=(len(df) - 1) // rows_to_display + 1, value=1)
+
+# Calculate the start and end indices for the current page
+start_idx = (page - 1) * rows_to_display
+end_idx = min(page * rows_to_display, len(df))
+
+# Display the dataset for the current page
+st.write(f"Displaying rows {start_idx + 1} to {end_idx} of {len(df)}")
+st.write(df.iloc[start_idx:end_idx])
+
+# Allow users to navigate between pages
+if st.button("Previous Page", key="previous"):
+    page = max(1, page - 1)
+if st.button("Next Page", key="next"):
+    page = min((len(df) - 1) // rows_to_display + 1, page + 1)
+
+
+
 

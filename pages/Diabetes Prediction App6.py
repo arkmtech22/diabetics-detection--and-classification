@@ -53,21 +53,6 @@ else:
     st.sidebar.warning("Upload a CSV file to load the dataset.")
 
 
-
-def app(df):
-    """This function create the Data Info page"""
-
-    # Add title to the page
-    st.title("Data page")
-
-    # Add subheader for the section
-    st.subheader("Show Data")
-
-    # Create an expansion option to check the data
-    with st.expander("Show data"):
-        st.dataframe(df)
-
-
 # Define the number of rows to display at a time
 rows_to_display = 10
 
@@ -87,7 +72,6 @@ if st.button("Previous Page", key="previous"):
     page = max(1, page - 1)
 if st.button("Next Page", key="next"):
     page = min((len(df) - 1) // rows_to_display + 1, page + 1)
-
 
 
 

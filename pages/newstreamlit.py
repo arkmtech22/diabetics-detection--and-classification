@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.tree import DecisionTreeClassifier
@@ -18,12 +17,12 @@ X = diabetes_data.drop("Outcome", axis=1)
 y = diabetes_data["Outcome"]
 
 # Split the dataset into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Standardize the data
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+# scaler = StandardScaler()
+# X_train = scaler.fit_transform(X_train)
+# X_test = scaler.transform(X_test)
 
 # Define machine learning models
 models = {
@@ -65,7 +64,7 @@ st.sidebar.write(user_input)
 
 # Function to predict diabetes
 def predict_diabetes(model):
-    model.fit(X_train, y_train)
+    model.fit(X, y)
     y_pred = model.predict(scaler.transform(pd.DataFrame(user_input)))
     return y_pred[0]
 
@@ -83,10 +82,10 @@ st.header("Evaluation Metrics:")
 
 for model_name, model in models.items():
     st.subheader(model_name)
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    cm = confusion_matrix(y_test, y_pred)
-    report = classification_report(y_test, y_pred)
+    y_pred = model.predict(X)
+    accuracy = accuracy_score(y, y_pred)
+    cm = confusion_matrix(y, y_pred)
+    report = classification_report(y, y_pred)
 
     st.write(f"Accuracy: {accuracy:.2f}")
     st.write("Confusion Matrix:")

@@ -1,6 +1,6 @@
             
 # Import necessary modules
-import streamlit as 
+import streamlit as st
 
 st.sidebar.header('Diabetes Prediction')
 select = st.sidebar.selectbox('Select Form', ['Form 1'], key='1')

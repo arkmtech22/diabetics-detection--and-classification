@@ -1,7 +1,49 @@
-            
 # Import necessary modules
+import warnings
+import numpy as np
 import streamlit as st
+import pandas as pd
 
+# Suppress the deprecation warning about np.bool
+warnings.filterwarnings("ignore", category=FutureWarning, module="numpy")
+
+# Define the URL for the Pima Indian Diabetes dataset
+dataset_url = "https://www.kaggle.com/datasets/kumargh/pimaindiansdiabetescsv"
+
+# Read the CSV file into a Pandas DataFrame
+@st.cache
+def load_data(url):
+    df = pd.read_csv(url)
+    return df
+
+# Load the dataset
+df = load_data(dataset_url)
+
+# Display the dataset
+st.write("Pima Indian Diabetes Dataset")
+st.write(df)
+
+# Define the number of rows to display at a time
+rows_to_display = 10
+
+# Define a variable to keep track of the current page
+page = st.sidebar.number_input('Page', min_value=1, max_value=(len(df) - 1) // rows_to_display + 1, value=1)
+
+# Calculate the start and end indices for the current page
+start_idx = (page - 1) * rows_to_display
+end_idx = min(page * rows_to_display, len(df))
+
+# Display the dataset for the current page
+st.write(f"Displaying rows {start_idx + 1} to {end_idx} of {len(df)}")
+st.write(df.iloc[start_idx:end_idx])
+
+# Allow users to navigate between pages
+if st.button("Previous Page", key="previous"):
+    page = max(1, page - 1)
+if st.button("Next Page", key="next"):
+    page = min((len(df) - 1) // rows_to_display + 1, page + 1)
+
+# ... (rest of your code)
 
 # Create a Streamlit app
 st.title("Pima Diabetes Prediction App")
@@ -33,43 +75,3 @@ user_input = {
 # Display user input data
 st.sidebar.subheader("User Input Data:")
 st.sidebar.write(user_input)
-
-import streamlit as st
-import pandas as pd
-
-# Upload the Pima Indian Diabetes dataset
-st.sidebar.header("Upload Pima Indian Diabetes Dataset")
-uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type=["csv"])
-
-# Check if a file was uploaded
-if uploaded_file is not None:
-    # Read the CSV file into a Pandas DataFrame
-    df = pd.read_csv(uploaded_file)
-
-    # Display the dataset
-    st.write("Pima Indian Diabetes Dataset")
-    st.write(df)
-else:
-    st.sidebar.warning("Upload a CSV file to load the dataset.")
-
-
-# Define the number of rows to display at a time
-rows_to_display = 10
-
-# Define a variable to keep track of the current page
-page = st.sidebar.number_input('Page', min_value=1, max_value=(len(df) - 1) // rows_to_display + 1, value=1)
-
-# Calculate the start and end indices for the current page
-start_idx = (page - 1) * rows_to_display
-end_idx = min(page * rows_to_display, len(df))
-
-# Display the dataset for the current page
-st.write(f"Displaying rows {start_idx + 1} to {end_idx} of {len(df)}")
-st.write(df.iloc[start_idx:end_idx])
-
-# Allow users to navigate between pages
-if st.button("Previous Page", key="previous"):
-    page = max(1, page - 1)
-if st.button("Next Page", key="next"):
-    page = min((len(df) - 1) // rows_to_display + 1, page + 1)
-
